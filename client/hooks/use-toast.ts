@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
@@ -187,15 +186,3 @@ function useToast() {
 }
 
 export { useToast, toast };
-=======
-export function useToast() {
-  const show = (message: string) => {
-    console.log("Toast:", message);
-  };
-  return { show };
-}
-
-export const toast = (message: string) => {
-  console.log("toast:", message);
-};
->>>>>>> ad0be13182b0596e8829a69e4fd15883c13b4ea7

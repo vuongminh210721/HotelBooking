@@ -1,6 +1,6 @@
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users, Home as HomeIcon, Maximize2, CheckCircle, MapPin, ArrowLeft } from "lucide-react";
 import rooms from "@/data/rooms";
 
 export default function View_Home() {
@@ -30,7 +30,24 @@ export default function View_Home() {
   }, [room]);
 
   if (!room)
-    return <div className="text-center py-20">Không tìm thấy phòng</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+        <div className="text-center px-6">
+          <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <HomeIcon className="w-8 h-8 text-gray-400" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Không tìm thấy phòng</h2>
+          <p className="text-sm text-gray-600 mb-6">Phòng bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
+          <Link
+            to="/rooms"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-green-500 text-white text-sm rounded-full font-semibold hover:shadow-lg transition-all"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Quay lại danh sách phòng</span>
+          </Link>
+        </div>
+      </div>
+    );
 
   const images = room.images || [];
 
@@ -40,189 +57,186 @@ export default function View_Home() {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
 
   return (
-    <div className="min-h-[60vh] bg-black/50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl max-h-[80vh] bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-black/50 flex items-center justify-center p-4">
+      <div className="w-full max-w-5xl max-h-[85vh] bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row">
         {/* Left side - Image Gallery */}
-        <div className="lg:w-[60%] relative bg-neutral-100">
+        <div className="lg:w-[58%] relative bg-gray-900">
           <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full">
-            <img
-              src={images[currentImageIndex]}
-              alt="Bedroom interior"
-              className="w-full h-full object-cover"
-            />
+            {images && images.length > 0 ? (
+              <>
+                <img
+                  src={images[currentImageIndex]}
+                  alt={`${room.name} - Image ${currentImageIndex + 1}`}
+                  className="w-full h-full object-cover"
+                />
 
-            {/* Navigation Arrows */}
-            <button
-              onClick={prevImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-6 h-6 text-neutral-800" />
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all"
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-6 h-6 text-neutral-800" />
-            </button>
+                {/* Navigation Arrows */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-gray-900" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="w-5 h-5 text-gray-900" />
+                    </button>
 
-            {/* Image Counter */}
-            <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-md text-sm font-medium">
-              {currentImageIndex + 1} / {images.length}
-            </div>
+                    {/* Image Counter */}
+                    <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-semibold">
+                      {currentImageIndex + 1} / {images.length}
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                <HomeIcon className="w-16 h-16 text-gray-400" />
+              </div>
+            )}
           </div>
 
           {/* Thumbnail Strip */}
-          <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-4">
-            <div className="flex gap-3 justify-center">
-              {images.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentImageIndex(idx)}
-                  className={`relative w-20 h-16 rounded overflow-hidden transition-all ${
-                    currentImageIndex === idx
+          {images && images.length > 1 && (
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-center">
+                {images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`relative flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all ${currentImageIndex === idx
                       ? "ring-2 ring-white scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  <img
-                    src={img}
-                    alt={`Thumbnail ${idx + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+                      : "opacity-60 hover:opacity-100"
+                      }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`Thumbnail ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Right side - Details */}
-        <div className="lg:w-[40%] flex flex-col relative overflow-hidden">
+        <div className="lg:w-[42%] flex flex-col relative">
           {/* Close button */}
-          <div className="sticky top-0 z-50 flex justify-end bg-white p-3 border-b border-gray-200">
+          <div className="sticky top-0 z-50 flex justify-end bg-white p-3 border-b border-gray-100">
             <button
-              onClick={() => navigate(-1)}
-              className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-all shadow-sm"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent("closeBooking"));
+                navigate(-1);
+              }}
+              className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-all"
               aria-label="Close"
             >
-              <X className="w-5 h-5 text-neutral-700" />
+              <ArrowLeft className="w-4 h-4 text-gray-700" />
             </button>
           </div>
 
           {/* Room Details */}
-          <div className="flex-1 overflow-y-auto p-6 lg:p-8">
+          <div className="flex-1 overflow-y-auto p-5 lg:p-6 space-y-5">
             {/* Header */}
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-neutral-900 mb-4">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
                 {room.name}
               </h1>
 
-              {/* Brand */}
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-4xl font-extrabold text-neutral-900">
-                  HOTEL
-                </span>
-                <span className="text-xl font-semibold text-teal-500">HUB</span>
+              {room.city && (
+                <div className="flex items-center gap-1.5 text-gray-600 mb-3">
+                  <MapPin className="w-4 h-4 text-teal-500" />
+                  <span className="text-sm font-medium">{room.city}</span>
+                </div>
+              )}
+
+              {/* Brand Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-teal-50 to-green-50 border border-teal-100 rounded-full mb-4">
+                <span className="text-lg font-extrabold text-gray-900">HOTEL</span>
+                <span className="text-sm font-semibold bg-gradient-to-r from-teal-500 to-green-500 bg-clip-text text-transparent">HUB</span>
               </div>
 
-              <p className="text-sm text-neutral-600 leading-relaxed mb-4">
+              <p className="text-sm text-gray-700 leading-relaxed">
                 {room.description}
               </p>
-              {room.descriptionEn && (
-                <p className="text-sm text-neutral-600 leading-relaxed">
-                  {room.descriptionEn}
-                </p>
-              )}
             </div>
 
-            {/* Room Info */}
-            <div className="mb-8">
-              <h2 className="text-base font-semibold text-neutral-900 mb-3">
-                Chi tiết
-              </h2>
-              <div className="space-y-2.5">
-                <div className="flex items-center gap-3">
-                  <span className="text-neutral-700 text-2xl">👥</span>
-                  <span className="text-sm text-neutral-700">
-                    {room.guests.replace(/[👤👥👨‍👩‍👧‍👦]/g, "").trim()}
-                  </span>
+            {/* Quick Info */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 border border-gray-200">
+                <div className="flex flex-col items-center text-center">
+                  <Maximize2 className="w-6 h-6 text-teal-500 mb-1.5" />
+                  <span className="text-xs text-gray-500 font-medium mb-0.5">Diện tích</span>
+                  <span className="text-base font-bold text-gray-900">{(room.size || 'N/A').replace(/�/g, '').trim()}</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-neutral-700 text-2xl">🛏️</span>
-                  <span className="text-sm text-neutral-700">
-                    {(room.bedType || "Giường đôi").replace(/🛏️/g, "").trim()}
-                  </span>
+              </div>
+
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 border border-gray-200">
+                <div className="flex flex-col items-center text-center">
+                  <HomeIcon className="w-6 h-6 text-teal-500 mb-1.5" />
+                  <span className="text-xs text-gray-500 font-medium mb-0.5">Loại giường</span>
+                  <span className="text-base font-bold text-gray-900">{(room.bedType || 'N/A').replace(/🛏️/g, '').trim()}</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-neutral-700 text-2xl">📏</span>
-                  <span className="text-sm text-neutral-700">
-                    {(room.size || "25").replace(/📐/g, "").trim()}
-                  </span>
+              </div>
+
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 border border-gray-200">
+                <div className="flex flex-col items-center text-center">
+                  <Users className="w-6 h-6 text-teal-500 mb-1.5" />
+                  <span className="text-xs text-gray-500 font-medium mb-0.5">Khách</span>
+                  <span className="text-base font-bold text-gray-900">{room.guests.replace(/👤|👥|👨‍👩‍👧‍�/g, '').trim()}</span>
                 </div>
               </div>
             </div>
 
             {/* Amenities */}
-            <div className="mb-8">
-              <h2 className="text-base font-semibold text-neutral-900 mb-3">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-teal-500" />
                 Tiện nghi
               </h2>
-              <div className="space-y-2.5">
-                {room.amenities?.map((a, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className="text-neutral-700 text-2xl">{a.icon}</span>
-                    <span className="text-sm text-neutral-700">{a.label}</span>
+              <div className="grid grid-cols-1 gap-2">
+                {room.amenities.map((amenity, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2.5 p-2.5 bg-gradient-to-r from-teal-50 to-green-50 hover:from-teal-100 hover:to-green-100 rounded-lg border border-teal-100 transition-all"
+                  >
+                    <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-br from-teal-500 to-green-500 rounded-md flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-900">{amenity.label}</span>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* Price + Book */}
-            <div className="border-t border-neutral-200 pt-6">
-              {room.soldOut ? (
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-red-200 bg-red-50">
-                    <span className="text-red-600 text-lg font-semibold">
-                      Hết phòng
-                    </span>
-                  </div>
+          {/* Sticky Footer - Booking */}
+          <div className="sticky bottom-0 bg-gradient-to-r from-teal-500 to-green-500 p-4 lg:p-5 border-t border-white/20">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="text-white/80 text-xs font-medium mb-1">Giá mỗi đêm</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-white">
+                    {room.price || "Liên hệ"}
+                  </span>
+                  {room.price && <span className="text-white/80 text-sm">vnđ</span>}
                 </div>
-              ) : (
-                <>
-                  <div className="mb-4 flex items-baseline gap-2">
-                    <div className="text-3xl font-bold text-red-500">
-                      {room.price || "Liên hệ"}
-                    </div>
-                    <div className="text-sm text-neutral-600">đồng/đêm</div>
-                  </div>
+              </div>
 
-                  <div className="text-xs text-neutral-500 mb-4">
-                    Đã bao gồm thuế & phí dịch vụ
-                  </div>
-
-                  {/* Availability Badge */}
-                  {room.availability &&
-                    room.availability.toLowerCase().includes("phòng cuối") && (
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-50 rounded">
-                          <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                          <span className="text-xs font-medium text-red-600">
-                            PHÒNG CUỐI
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                  {/* Book Button */}
-                  <Link
-                    to={`/booking?room=${room.id}`}
-                    className="w-full inline-flex items-center justify-center bg-teal-500 hover:bg-teal-600 text-white font-medium py-3.5 rounded-lg transition-colors shadow-sm"
-                  >
-                    Chọn phòng
-                  </Link>
-                </>
-              )}
+              <button
+                onClick={() => navigate(`/booking?room=${room.id}`)}
+                className="px-6 py-3 bg-white text-teal-600 font-bold text-sm rounded-xl hover:bg-gray-50 hover:scale-105 transition-all shadow-lg whitespace-nowrap"
+              >
+                Đặt phòng ngay
+              </button>
             </div>
           </div>
         </div>

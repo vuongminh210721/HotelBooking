@@ -6,6 +6,8 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import Banner_Search_Bar from "@/components/Banner_Search_Bar";
+import { useNavigate } from "react-router-dom";
 
 const images = [
   {
@@ -31,8 +33,21 @@ const images = [
 ];
 
 export function UI_Carousel() {
+  const navigate = useNavigate();
+
   return (
     <div className="relative w-full h-[550px] md:h-[650px] lg:h-[750px]">
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 w-full">
+        <Banner_Search_Bar />
+      </div>
+      {/* <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+        <button
+          onClick={() => navigate("/room-system")}
+          className="px-8 py-3 bg-transparent text-white border-2 border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 text-lg font-semibold"
+        >
+          Khám phá
+        </button>
+      </div> */}
       <Carousel
         className="h-full w-full"
         plugins={[

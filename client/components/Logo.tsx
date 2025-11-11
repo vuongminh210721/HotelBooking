@@ -17,11 +17,20 @@ const Logo: React.FC<LogoProps> = ({
     <Link
       to="/"
       className={cn(
-        "flex items-center font-medium",
+        "flex items-center gap-3 font-medium",
         isHomePage && !scrolled ? "text-white" : "text-[#2fd680]",
         className
       )}
     >
+      <img
+        src={`${import.meta.env.BASE_URL}logo.png`}
+        alt="HotelHub Logo"
+        className="h-10 w-10 object-contain"
+        onError={(e) => {
+          console.error('Logo failed to load');
+          e.currentTarget.style.display = 'none';
+        }}
+      />
       <span className="text-2xl font-bold tracking-tight">
         HOTEL
         <span
