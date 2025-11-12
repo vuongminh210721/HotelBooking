@@ -49,12 +49,7 @@ export default function Contact() {
       <div className="max-w-5xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="inline-block bg-blue-100 px-6 py-2 rounded-full mb-6 border border-blue-200">
-            <span className="text-blue-600 font-bold text-sm tracking-widest">
-              LIÊN HỆ
-            </span>
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-[#2fd680] mb-6">
             Hãy kết nối với chúng tôi
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -96,7 +91,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
+            <div className="bg-gradient-to-br from-teal-500 to-green-500 text-white rounded-2xl p-8 shadow-xl">
               <h3 className="text-2xl font-bold mb-3">Giờ làm việc</h3>
               <div className="space-y-2 text-white/90">
                 <p>Thứ 2 - Thứ 6: 8:00 - 22:00</p>
@@ -189,7 +184,7 @@ export default function Contact() {
                   <button
                     onClick={handleSubmit}
                     disabled={status === "sending"}
-                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-5 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3 text-lg"
+                    className="w-full bg-gradient-to-r from-teal-500 to-green-500 hover:from-green-600 hover:to-green-700 text-white font-bold py-5 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3 text-lg"
                   >
                     {status === "sending" ? (
                       <>

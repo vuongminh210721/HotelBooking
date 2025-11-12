@@ -210,13 +210,31 @@ export default function RoomCard({
                     <p className="text-xs text-gray-400 mt-1">Đã bao gồm thuế phí</p>
                   </div>
 
-                  <Link
-                    to={`/booking?room=${id}`}
+                  <button
+                    onClick={() => {
+                      // Dispatch event to open the header booking modal and pass room info
+                      try {
+                        window.dispatchEvent(
+                          new CustomEvent("openBooking", {
+                            detail: { roomId: id, roomName: name, price },
+                          })
+                        );
+                      } catch (e) {
+                        // fallback for environments that don't support CustomEvent constructor
+                        const ev = document.createEvent("CustomEvent");
+                        ev.initCustomEvent("openBooking", true, true, {
+                          roomId: id,
+                          roomName: name,
+                          price,
+                        });
+                        window.dispatchEvent(ev);
+                      }
+                    }}
                     className="px-6 py-3 bg-gradient-to-r from-teal-500 to-green-500 text-white text-sm md:text-base font-semibold rounded-full hover:shadow-xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
                   >
                     <span>Đặt phòng ngay</span>
                     <ArrowRight className="w-5 h-5" />
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>

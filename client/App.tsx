@@ -23,7 +23,9 @@ import FAQ from "./pages/FAQ";
 import MorePolicy from "./pages/More_Policy";
 import MemberPrivilege from "./pages/Member_Privilege";
 import View_Home from "./components/View_Home";
-import BookingHome from "./pages/Booking_Home";
+import Booking_Home from "./components/Booking_Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const RouteWrapper: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
+      {/* Mount booking modal globally so it can listen for openBooking events */}
+      <Booking_Home />
       <main className={`flex-1 ${isHome ? "" : "pt-16"}`}>
         <Routes>
           <Route path="/carousel" element={<UI_Carousel />} />
@@ -50,7 +54,9 @@ const RouteWrapper: React.FC = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/more-policy" element={<MorePolicy />} />
           <Route path="/member-privilege" element={<MemberPrivilege />} />
-          <Route path="/booking" element={<BookingHome />} />
+          <Route path="/booking" element={<Booking_Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </main>
       <Footer />
