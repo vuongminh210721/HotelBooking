@@ -63,11 +63,11 @@ export default function Banner_Search_Bar({
           <div className="flex w-full items-stretch">
             {/* Địa điểm */}
             <div className="flex-1 p-4 flex flex-col justify-between">
-              <label className="text-[#46d38a] text-base font-semibold mb-2 block">
+              <label className="text-[#2fd680] text-base font-semibold mb-2 block">
                 Địa điểm
               </label>
               <select
-                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-white bg-transparent text-base focus:ring-teal-500 focus:border-teal-500 cursor-pointer appearance-none"
+                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-white bg-transparent text-base focus:ring-[#2fd680] focus:border-[#2fd680] cursor-pointer appearance-none"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               >
@@ -88,12 +88,12 @@ export default function Banner_Search_Bar({
 
             {/* Nhận phòng */}
             <div className="flex-1 p-4 flex flex-col justify-between">
-              <label className="text-[#46d38a] text-base font-semibold mb-2 block">
+              <label className="text-[#2fd680] text-base font-semibold mb-2 block">
                 Nhận phòng
               </label>
               <input
                 type="date"
-                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-white bg-transparent text-base focus:ring-teal-500 focus:border-teal-500 cursor-pointer"
+                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-white bg-transparent text-base focus:ring-[#2fd680] focus:border-[#2fd680] cursor-pointer"
                 value={checkIn}
                 onChange={(e) => setCheckIn(e.target.value)}
               />
@@ -104,12 +104,12 @@ export default function Banner_Search_Bar({
 
             {/* Trả phòng */}
             <div className="flex-1 p-4 flex flex-col justify-between">
-              <label className="text-[#46d38a] text-base font-semibold mb-2 block">
+              <label className="text-[#2fd680] text-base font-semibold mb-2 block">
                 Trả phòng
               </label>
               <input
                 type="date"
-                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-white bg-transparent text-base focus:ring-teal-500 focus:border-teal-500 cursor-pointer"
+                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-white bg-transparent text-base focus:ring-[#2fd680] focus:border-[#2fd680] cursor-pointer"
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
               />
@@ -120,12 +120,12 @@ export default function Banner_Search_Bar({
 
             {/* Khách */}
             <div className="w-[150px] p-4 flex flex-col justify-between">
-              <label className="text-[#46d38a] text-base font-semibold mb-2 block">
+              <label className="text-[#2fd680] text-base font-semibold mb-2 block">
                 Khách
               </label>
               <div className="flex items-center justify-between border border-gray-300 rounded-md px-4 py-2.5">
                 <button
-                  className="text-gray-200 hover:text-teal-300 text-xl"
+                  className="text-gray-200 hover:text-[#2fd680] text-xl"
                   onClick={() => setGuests(Math.max(1, guests - 1))}
                 >
                   −
@@ -134,7 +134,7 @@ export default function Banner_Search_Bar({
                   {guests}
                 </span>
                 <button
-                  className="text-gray-200 hover:text-teal-300 text-xl"
+                  className="text-gray-200 hover:text-[#2fd680] text-xl"
                   onClick={() => setGuests(Math.min(10, guests + 1))}
                 >
                   +
@@ -151,8 +151,8 @@ export default function Banner_Search_Bar({
             onClick={handleClick}
             className={`flex px-5 py-2 justify-center font-semibold items-center rounded-full transition-colors duration-300 whitespace-nowrap text-sm leading-6
     border border-white/70 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]
-    ${clicked ? "text-[#46d38a]" : "text-white"}
-    hover:text-teal-300 hover:bg-white/10`}
+    ${clicked ? "text-[#2fd680]" : "text-white"}
+    hover:text-[#2fd680] hover:bg-white/10`}
           >
             Tìm phòng
           </button>

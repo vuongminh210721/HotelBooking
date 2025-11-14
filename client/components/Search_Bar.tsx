@@ -41,37 +41,17 @@ export default function SearchBar({
     locationParam || initialLocation,
   );
   const [errorMessage, setErrorMessage] = useState("");
-  const mounted = useRef(false);
-
-  // Sync guest count to URL so navigating to room details and back preserves selection
-  useEffect(() => {
-    // Skip initial mount so we don't override any query params present on load
-    if (!mounted.current) {
-      mounted.current = true;
-      return;
-    }
-
-    try {
-      const params = new URLSearchParams(location.search);
-      if (typeof guests !== "undefined" && guests !== null) {
-        params.set("guests", String(guests));
-      } else {
-        params.delete("guests");
-      }
-      // preserve other params, replace history entry to avoid clutter
-      navigate(
-        { pathname: location.pathname, search: params.toString() },
-        { replace: true },
-      );
-    } catch (e) {
-      // ignore URL update failures
-    }
-  }, [guests]);
 
   const handleSearch = () => {
     // Validate dates
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    // Check if only one date is filled
+    if ((checkIn && !checkOut) || (!checkIn && checkOut)) {
+      setErrorMessage("Vui lòng nhập cả ngày nhận phòng và ngày trả phòng");
+      return;
+    }
 
     if (checkIn) {
       const checkInDate = new Date(checkIn);
@@ -110,7 +90,7 @@ export default function SearchBar({
                 Địa điểm
               </label>
               <select
-                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-black text-base focus:ring-teal-500 focus:border-teal-500 cursor-pointer"
+                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-black text-base focus:ring-[#2fd680] focus:border-[#2fd680] cursor-pointer"
                 value={selectedLocation}
                 onChange={(e) => setSelectedLocation(e.target.value)}
               >
@@ -132,7 +112,7 @@ export default function SearchBar({
               </label>
               <input
                 type="date"
-                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-black text-base focus:ring-teal-500 focus:border-teal-500 cursor-pointer"
+                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-black text-base focus:ring-[#2fd680] focus:border-[#2fd680] cursor-pointer"
                 value={checkIn}
                 onChange={(e) => setCheckIn(e.target.value)}
               />
@@ -148,7 +128,7 @@ export default function SearchBar({
               </label>
               <input
                 type="date"
-                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-black text-base focus:ring-teal-500 focus:border-teal-500 cursor-pointer"
+                className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-black text-base focus:ring-[#2fd680] focus:border-[#2fd680] cursor-pointer"
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
               />
@@ -164,7 +144,7 @@ export default function SearchBar({
               </label>
               <div className="flex items-center justify-between border border-gray-300 rounded-md px-4 py-2.5">
                 <button
-                  className="text-gray-400 hover:text-teal-600 text-xl"
+                  className="text-gray-400 hover:text-[#2fd680] text-xl"
                   onClick={() => setGuests(Math.max(1, guests - 1))}
                 >
                   −
@@ -173,7 +153,7 @@ export default function SearchBar({
                   {guests}
                 </span>
                 <button
-                  className="text-gray-400 hover:text-teal-600 text-xl"
+                  className="text-gray-400 hover:text-[#2fd680] text-xl"
                   onClick={() => setGuests(Math.min(10, guests + 1))}
                 >
                   +
@@ -189,7 +169,7 @@ export default function SearchBar({
           <div className="p-4 flex justify-center items-center">
             <button
               onClick={handleSearch}
-              className="min-w-[150px] px-6 py-3 rounded-[60px] border border-teal-600 bg-white text-teal-600 text-base font-semibold hover:bg-teal-600 hover:text-white transition-colors"
+              className="min-w-[150px] px-6 py-3 rounded-[60px] border border-[#2fd680] bg-white text-[#2fd680] text-base font-semibold hover:bg-[#2fd680] hover:text-white transition-colors"
             >
               Tìm phòng
             </button>

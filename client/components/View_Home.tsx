@@ -2,8 +2,10 @@ import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Users, Home as HomeIcon, Maximize2, CheckCircle, MapPin, ArrowLeft } from "lucide-react";
 import rooms from "@/data/rooms";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 
 export default function View_Home() {
+  useScrollToTop();
   const { id } = useParams();
   const room = rooms.find((r) => r.id === id);
   const location = useLocation();
@@ -38,13 +40,24 @@ export default function View_Home() {
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Không tìm thấy phòng</h2>
           <p className="text-sm text-gray-600 mb-6">Phòng bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-          <Link
-            to="/rooms"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-green-500 text-white text-sm rounded-full font-semibold hover:shadow-lg transition-all"
+          <a
+            href="/rooms"
+            onClick={(e) => {
+              e.preventDefault();
+              try {
+                const selected = window.localStorage.getItem("hb:selectedCity");
+                const params = new URLSearchParams();
+                if (selected) params.set("location", selected);
+                navigate({ pathname: "/rooms", search: params.toString() });
+              } catch (err) {
+                navigate("/rooms");
+              }
+            }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2fd680] text-white text-sm rounded-full font-semibold hover:shadow-lg hover:bg-[#25a060] transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Quay lại danh sách phòng</span>
-          </Link>
+          </a>
         </div>
       </div>
     );
@@ -152,16 +165,22 @@ export default function View_Home() {
               </h1>
 
               {room.city && (
-                <div className="flex items-center gap-1.5 text-gray-600 mb-3">
-                  <MapPin className="w-4 h-4 text-teal-500" />
+                <div className="flex items-center gap-1.5 text-gray-600 mb-1">
+                  <MapPin className="w-4 h-4 text-[#2fd680]" />
                   <span className="text-sm font-medium">{room.city}</span>
                 </div>
               )}
 
+              {room.floor && (
+                <div className="text-xs text-gray-500 mb-3">
+                  {room.floor} {room.view && `• ${room.view}`}
+                </div>
+              )}
+
               {/* Brand Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-teal-50 to-green-50 border border-teal-100 rounded-full mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50 border border-[#2fd680] rounded-full mb-4">
                 <span className="text-lg font-extrabold text-gray-900">HOTEL</span>
-                <span className="text-sm font-semibold bg-gradient-to-r from-teal-500 to-green-500 bg-clip-text text-transparent">HUB</span>
+                <span className="text-sm font-semibold text-[#2fd680]">HUB</span>
               </div>
 
               <p className="text-sm text-gray-700 leading-relaxed">
@@ -173,7 +192,7 @@ export default function View_Home() {
             <div className="grid grid-cols-3 gap-3">
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 border border-gray-200">
                 <div className="flex flex-col items-center text-center">
-                  <Maximize2 className="w-6 h-6 text-teal-500 mb-1.5" />
+                  <Maximize2 className="w-6 h-6 text-[#2fd680] mb-1.5" />
                   <span className="text-xs text-gray-500 font-medium mb-0.5">Diện tích</span>
                   <span className="text-base font-bold text-gray-900">{(room.size || 'N/A').replace(/�/g, '').trim()}</span>
                 </div>
@@ -181,7 +200,7 @@ export default function View_Home() {
 
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 border border-gray-200">
                 <div className="flex flex-col items-center text-center">
-                  <HomeIcon className="w-6 h-6 text-teal-500 mb-1.5" />
+                  <HomeIcon className="w-6 h-6 text-[#2fd680] mb-1.5" />
                   <span className="text-xs text-gray-500 font-medium mb-0.5">Loại giường</span>
                   <span className="text-base font-bold text-gray-900">{(room.bedType || 'N/A').replace(/🛏️/g, '').trim()}</span>
                 </div>
@@ -189,7 +208,7 @@ export default function View_Home() {
 
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 border border-gray-200">
                 <div className="flex flex-col items-center text-center">
-                  <Users className="w-6 h-6 text-teal-500 mb-1.5" />
+                  <Users className="w-6 h-6 text-[#2fd680] mb-1.5" />
                   <span className="text-xs text-gray-500 font-medium mb-0.5">Khách</span>
                   <span className="text-base font-bold text-gray-900">{room.guests.replace(/👤|👥|👨‍👩‍👧‍�/g, '').trim()}</span>
                 </div>
@@ -199,16 +218,16 @@ export default function View_Home() {
             {/* Amenities */}
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-teal-500" />
+                <CheckCircle className="w-5 h-5 text-[#2fd680]" />
                 Tiện nghi
               </h2>
               <div className="grid grid-cols-1 gap-2">
                 {room.amenities.map((amenity, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2.5 p-2.5 bg-gradient-to-r from-teal-50 to-green-50 hover:from-teal-100 hover:to-green-100 rounded-lg border border-teal-100 transition-all"
+                    className="flex items-center gap-2.5 p-2.5 bg-teal-50 hover:bg-teal-100 rounded-lg border border-[#2fd680] transition-all"
                   >
-                    <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-br from-teal-500 to-green-500 rounded-md flex items-center justify-center">
+                    <div className="flex-shrink-0 w-7 h-7 bg-[#2fd680] rounded-md flex items-center justify-center">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-sm font-semibold text-gray-900">{amenity.label}</span>
@@ -219,26 +238,50 @@ export default function View_Home() {
           </div>
 
           {/* Sticky Footer - Booking */}
-          <div className="sticky bottom-0 bg-gradient-to-r from-teal-500 to-green-500 p-4 lg:p-5 border-t border-white/20">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex-1">
-                <div className="text-white/80 text-xs font-medium mb-1">Giá mỗi đêm</div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-white">
-                    {room.price || "Liên hệ"}
-                  </span>
-                  {room.price && <span className="text-white/80 text-sm">vnđ</span>}
-                </div>
-              </div>
+          <div className="sticky bottom-0 bg-[#2fd680] p-4 lg:p-5 border-t border-white/20">
+            <div className="flex items-center justify-center gap-4">
+              {/* Nếu có giá thì hiển thị giá + nút đặt phòng */}
+              {room.price ? (
+                <>
+                  <div className="flex-1">
+                    <div className="text-white/80 text-base font-medium mb-2">Giá mỗi đêm</div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-bold text-white">
+                        {room.price}
+                      </span>
+                      <span className="text-white/80 text-sm">vnđ</span>
+                    </div>
+                  </div>
 
-              <button
-                onClick={() => navigate(`/booking?room=${room.id}`)}
-                className="px-6 py-3 bg-white text-teal-600 font-bold text-sm rounded-xl hover:bg-gray-50 hover:scale-105 transition-all shadow-lg whitespace-nowrap"
-              >
-                Đặt phòng ngay
-              </button>
+                  <button
+                    onClick={() => {
+                      window.dispatchEvent(
+                        new CustomEvent("openBooking", {
+                          detail: {
+                            roomId: room.id,
+                            roomName: room.name,
+                            price: room.price,
+                            guests: room.guests,
+                          },
+                        })
+                      );
+                    }}
+                    className="px-6 py-3 bg-white text-[#2fd680] font-bold text-sm rounded-xl hover:bg-gray-50 hover:scale-105 transition-all shadow-lg whitespace-nowrap"
+                  >
+                    Đặt phòng ngay
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/contact"
+                  className="px-8 py-3 bg-white text-[#2fd680] font-bold text-base rounded-xl hover:bg-gray-50 hover:scale-105 transition-all shadow-lg whitespace-nowrap"
+                >
+                  Liên hệ
+                </Link>
+              )}
             </div>
           </div>
+
         </div>
       </div>
     </div>

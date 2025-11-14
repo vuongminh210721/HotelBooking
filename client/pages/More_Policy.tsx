@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
+
 export default function More_Policy() {
+  useScrollToTop();
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800 leading-relaxed">
       <h1 className="text-2xl md:text-3xl font-bold text-[#2fd680] mb-6 text-center">

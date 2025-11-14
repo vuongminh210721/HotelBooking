@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 
 export default function FAQ() {
+  useScrollToTop();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const faqs = [

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Send, CheckCircle, Mail, User, MessageSquare } from "lucide-react";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 
 export default function Contact() {
+  useScrollToTop();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");

@@ -4,8 +4,10 @@ import { Info, Search } from "lucide-react";
 import SearchBar from "@/components/Search_Bar";
 import RoomCard from "@/components/Room_Card";
 import rooms from "@/data/rooms";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 
 export default function RoomSystem() {
+  useScrollToTop();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,19 +22,26 @@ export default function RoomSystem() {
 
   const handleSearch = (searchFilters) => {
     setLoading(true);
+    // Update filters state so UI displays current search criteria
+    setFilters(searchFilters);
     // Simulate API call
     setTimeout(() => {
       const filtered = rooms.filter((room) => {
-        // Filter by city/location
+        // Filter by city/location - must match if specified
         if (searchFilters.location && room.city !== searchFilters.location) {
           return false;
         }
 
-        // Parse number of guests from room data (now without emoji)
-        const roomGuests = parseInt(room.guests.split(" ")[0], 10) || 1;
+        // Filter by guests - must match exactly if specified
+        if (typeof searchFilters.guests !== "undefined" && searchFilters.guests !== null) {
+          const roomGuests = parseInt(room.guests.split(" ")[0], 10) || 1;
+          if (roomGuests !== searchFilters.guests) {
+            return false;
+          }
+        }
 
-        // Match EXACT number of guests: 1 khách → phòng 1 người, 2 khách → phòng 2 người, etc.
-        return roomGuests === searchFilters.guests;
+        // Room passes all filters
+        return true;
       });
       setFilteredRooms(filtered);
       setLoading(false);
@@ -67,22 +76,51 @@ export default function RoomSystem() {
     const qLocation = params.get("location") || "";
     const qCheckIn = params.get("checkIn") || "";
     const qCheckOut = params.get("checkOut") || "";
-    const qGuests = parseInt(params.get("guests") || "", 10);
+    const qGuestsParam = params.get("guests");
+    const qGuests = qGuestsParam !== null ? parseInt(qGuestsParam, 10) : undefined;
 
-    if (qLocation || qCheckIn || qCheckOut || !Number.isNaN(qGuests)) {
+    if (qLocation || qCheckIn || qCheckOut || typeof qGuests !== "undefined") {
       const initial = {
         location: qLocation,
         checkIn: qCheckIn,
         checkOut: qCheckOut,
-        guests: Number.isNaN(qGuests) || qGuests === 0 ? 2 : qGuests,
+        // If guests param present but invalid (NaN) or zero, default to 2; if absent, leave undefined
+        guests:
+          typeof qGuests === "undefined"
+            ? undefined
+            : Number.isNaN(qGuests) || qGuests === 0
+              ? 2
+              : qGuests,
       };
       setFilters(initial);
-      // run search with parsed params so filteredRooms matches
-      handleSearch(initial);
+
+      // Apply filtering immediately on mount
+      setLoading(true);
+      setTimeout(() => {
+        const filtered = rooms.filter((room) => {
+          // Filter by city/location - must match if specified
+          if (initial.location && room.city !== initial.location) {
+            return false;
+          }
+
+          // Filter by guests - must match exactly if specified
+          if (typeof initial.guests !== "undefined" && initial.guests !== null) {
+            const roomGuests = parseInt(room.guests.split(" ")[0], 10) || 1;
+            if (roomGuests !== initial.guests) {
+              return false;
+            }
+          }
+
+          // Room passes all filters
+          return true;
+        });
+        setFilteredRooms(filtered);
+        setLoading(false);
+      }, 100);
     } else {
       setFilteredRooms(rooms);
     }
-  }, []);
+  }, [location.search]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -90,7 +128,7 @@ export default function RoomSystem() {
         {/* Header Section */}
         <div className="mb-10 md:mb-12 pt-6 md:pt-10">
           <div className="text-center md:text-left space-y-2">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2fd680] leading-tight">
               Lựa chọn phòng
             </h1>
             <p className="text-base md:text-lg text-gray-600">
@@ -129,9 +167,8 @@ export default function RoomSystem() {
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div className="text-base md:text-lg text-gray-700">
                     <p className="mb-1">
-                      Tìm thấy <span className="font-bold text-teal-600">{filteredRooms.length}</span> phòng
+                      Tìm thấy <span className="font-bold text-[#2fd680]">{filteredRooms.length}</span> phòng
                       {filters.location && <span> tại <span className="font-semibold text-gray-900">{filters.location}</span></span>}
-                      {filters.guests && <span> cho <span className="font-semibold text-gray-900">{filters.guests}</span> khách</span>}
                     </p>
                     {(filters.checkIn || filters.checkOut) && (
                       <p className="text-sm text-gray-500">
@@ -172,7 +209,7 @@ export default function RoomSystem() {
                   Không tìm thấy phòng phù hợp
                 </h3>
                 <p className="text-gray-600 text-center max-w-md mb-6">
-                  Xin lỗi! Chúng tôi không có phòng phù hợp với tiêu chí của bạn. Vui lòng thử lại với điều kiện khác.
+                  Xin lỗi! Chúng tôi không có phòng phù hợp với tiêu chí của bạn. Vui lòng thử lại.
                 </p>
                 <button
                   onClick={() => {

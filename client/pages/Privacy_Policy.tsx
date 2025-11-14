@@ -1,4 +1,7 @@
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
+
 export default function PrivacyPolicy() {
+  useScrollToTop();
   return (
     <div className="max-w-4xl mx-auto py-12 px-6 text-justify text-gray-800 leading-7">
       <h1 className="text-2xl font-bold text-[#2fd680] mb-6 text-center">

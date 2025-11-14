@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { MapPin, Maximize2, Home as HomeIcon, Users, CheckCircle, ArrowRight, Image as ImageIcon } from "lucide-react";
 
 interface Amenity {
-  icon: string;
   label: string;
 }
 
@@ -11,6 +10,8 @@ interface RoomCardProps {
   id: string;
   name: string;
   city?: string;
+  floor?: string;
+  view?: string;
   size?: string;
   bedType?: string;
   guests: string;
@@ -27,6 +28,8 @@ export default function RoomCard({
   id,
   name,
   city,
+  floor,
+  view,
   size,
   bedType,
   guests,
@@ -57,7 +60,7 @@ export default function RoomCard({
 
   return (
     <div
-      className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-teal-200"
+      className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-[#2fd680]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -65,13 +68,18 @@ export default function RoomCard({
         {/* Header */}
         <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
           <div className="flex-1">
-            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors duration-300">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#2fd680] transition-colors duration-300">
               {name}
             </h3>
             {city && (
               <div className="flex items-center gap-2 text-gray-600">
-                <MapPin className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                <MapPin className="w-4 h-4 text-[#2fd680] flex-shrink-0" />
                 <span className="text-sm font-medium">{city}</span>
+              </div>
+            )}
+            {floor && (
+              <div className="text-xs text-gray-500 mt-1">
+                {floor} {view && `• ${view}`}
               </div>
             )}
           </div>
@@ -134,23 +142,23 @@ export default function RoomCard({
             </div>
 
             {/* Room Info Tags */}
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-5 justify-center">
               {size && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-lg text-xs font-medium text-gray-700 border border-gray-200">
-                  <Maximize2 className="w-4 h-4 text-gray-500" />
-                  <span>{size.replace(/📐|🏙️/g, '').trim()}</span>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 rounded-lg text-xs font-medium text-[#2fd680] border border-teal-200">
+                  <Maximize2 className="w-4 h-4 text-[#2fd680]" />
+                  <span>{size}</span>
                 </div>
               )}
               {bedType && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-lg text-xs font-medium text-gray-700 border border-gray-200">
-                  <HomeIcon className="w-4 h-4 text-gray-500" />
-                  <span>{bedType.replace(/🛏️/g, '').trim()}</span>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 rounded-lg text-xs font-medium text-[#2fd680] border border-teal-200">
+                  <HomeIcon className="w-4 h-4 text-[#2fd680]" />
+                  <span>{bedType}</span>
                 </div>
               )}
               {guests && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 rounded-lg text-xs font-medium text-teal-700 border border-teal-200">
-                  <Users className="w-4 h-4 text-teal-600" />
-                  <span>{guests.replace(/👤|👥|👨‍👩‍👧‍👦/g, '').trim()}</span>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 rounded-lg text-xs font-medium text-[#2fd680] border border-teal-200">
+                  <Users className="w-4 h-4 text-[#2fd680]" />
+                  <span>{guests}</span>
                 </div>
               )}
             </div>
@@ -166,19 +174,19 @@ export default function RoomCard({
 
               {/* Amenities */}
               {amenities && amenities.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-5">
                   {amenities.slice(0, 4).map((amenity, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-teal-50 to-green-50 border border-teal-100 rounded-lg text-xs font-medium text-teal-700 hover:from-teal-100 hover:to-green-100 transition-all"
+                      className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-teal-50 to-green-50 border border-teal-100 rounded-lg text-xs font-medium text-[#2fd680] hover:from-teal-100 hover:to-green-100 transition-all"
                       title={amenity.label}
                     >
-                      <CheckCircle className="w-3.5 h-3.5 text-teal-600" />
+                      <CheckCircle className="w-3.5 h-3.5 text-[#2fd680]" />
                       <span>{amenity.label}</span>
                     </div>
                   ))}
                   {amenities.length > 4 && (
-                    <div className="flex items-center px-3 py-2 text-xs font-semibold text-teal-600">
+                    <div className="flex items-center px-3 py-2 text-xs font-semibold text-[#2fd680]">
                       +{amenities.length - 4} tiện ích
                     </div>
                   )}
@@ -189,10 +197,12 @@ export default function RoomCard({
             {/* Actions */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pt-4 border-t border-gray-100">
               {/* View Details Link */}
+
               <Link
                 to={{ pathname: `/rooms/${id}`, search: location.search }}
-                className="flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold text-sm md:text-base group/link transition-all"
+                className="flex items-center gap-2 text-[#2fd680] hover:text-[#25a060] font-semibold text-sm md:text-base group/link transition-all"
               >
+
                 <span>Xem chi tiết phòng</span>
                 <ArrowRight className="w-5 h-5 transform group-hover/link:translate-x-1 transition-transform" />
               </Link>

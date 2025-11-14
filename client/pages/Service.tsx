@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useInView } from "react-intersection-observer";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 
 // Định nghĩa kiểu dữ liệu 
 interface Service {
@@ -235,6 +235,7 @@ const ServiceModal = ({
 
 // Component chính: Services (Trang Dịch Vụ)
 export default function Services() {
+  useScrollToTop();
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   // 1. DỮ LIỆU: 

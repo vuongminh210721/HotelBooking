@@ -1,4 +1,7 @@
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
+
 export default function CheckInPolicy() {
+  useScrollToTop();
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 text-gray-800 leading-relaxed">
       <h1 className="text-3xl font-bold text-center text-[#2fd680] mb-8">

@@ -56,48 +56,59 @@ export default function Header() {
           />
 
           <nav className="hidden lg:flex items-center gap-5 flex-1 justify-end px-[15px]">
-            <Link
-              to="/rooms"
-              className={`font-['Be_Vietnam_Pro'] text-sm font-normal leading-6 capitalize transition-colors ${isHomePage && !scrolled
-                ? "text-white hover:text-teal-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                : "text-gray-900 hover:text-teal-600"
+            <a
+              href="/rooms"
+              onClick={(e) => {
+                e.preventDefault();
+                try {
+                  const selected = window.localStorage.getItem("hb:selectedCity");
+                  const params = new URLSearchParams();
+                  if (selected) params.set("location", selected);
+                  navigate({ pathname: "/rooms", search: params.toString() });
+                } catch (err) {
+                  navigate("/rooms");
+                }
+              }}
+              className={`font-['Be_Vietnam_Pro'] text-base font-semibold leading-5 capitalize transition-colors ${isHomePage && !scrolled
+                ? "text-white hover:text-[#2fd680] drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                : "text-gray-900 hover:text-[#2fd680]"
                 }`}
             >
               HỆ THỐNG PHÒNG
-            </Link>
+            </a>
 
             <Link
               to="/services"
-              className={`font-['Be_Vietnam_Pro'] text-sm font-normal leading-6 capitalize transition-colors ${isHomePage && !scrolled
-                ? "text-white hover:text-teal-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                : "text-gray-900 hover:text-teal-600"
+              className={`font-['Be_Vietnam_Pro'] text-base font-semibold leading-5 capitalize transition-colors ${isHomePage && !scrolled
+                ? "text-white hover:text-[#2fd680] drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                : "text-gray-900 hover:text-[#2fd680]"
                 }`}
             >
               DỊCH VỤ
             </Link>
             <Link
               to="/food"
-              className={`font-['Be_Vietnam_Pro'] text-sm font-normal leading-6 capitalize transition-colors ${isHomePage && !scrolled
-                ? "text-white hover:text-teal-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                : "text-gray-900 hover:text-teal-600"
+              className={`font-['Be_Vietnam_Pro'] text-base font-semibold leading-5 capitalize transition-colors ${isHomePage && !scrolled
+                ? "text-white hover:text-[#2fd680] drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                : "text-gray-900 hover:text-[#2fd680]"
                 }`}
             >
               ẨM THỰC
             </Link>
             <Link
               to="/locations"
-              className={`font-['Be_Vietnam_Pro'] text-sm font-normal leading-6 capitalize transition-colors ${isHomePage && !scrolled
-                ? "text-white hover:text-teal-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                : "text-gray-900 hover:text-teal-600"
+              className={`font-['Be_Vietnam_Pro'] text-base font-semibold leading-5 capitalize transition-colors ${isHomePage && !scrolled
+                ? "text-white hover:text-[#2fd680] drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                : "text-gray-900 hover:text-[#2fd680]"
                 }`}
             >
               VỊ TRÍ
             </Link>
             <Link
               to="/contact"
-              className={`font-['Be_Vietnam_Pro'] text-sm font-normal leading-6 capitalize transition-colors ${isHomePage && !scrolled
-                ? "text-white hover:text-teal-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                : "text-gray-900 hover:text-teal-600"
+              className={`font-['Be_Vietnam_Pro'] text-base font-semibold leading-5 capitalize transition-colors ${isHomePage && !scrolled
+                ? "text-white hover:text-[#2fd680] drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                : "text-gray-900 hover:text-[#2fd680]"
                 }`}
             >
               LIÊN HỆ
@@ -106,13 +117,14 @@ export default function Header() {
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => navigate('/login')}
-              className={`flex px-4 py-2 justify-center items-center rounded-xl transition-colors duration-300 whitespace-nowrap font-['Be_Vietnam_Pro'] text-sm font-normal leading-6 ${isHomePage && !scrolled
+              className={`flex px-4 py-2 justify-center items-center rounded-xl transition-colors duration-300 whitespace-nowrap font-['Be_Vietnam_Pro'] text-sm font-semibold leading-6 ${isHomePage && !scrolled
                 ? "text-white border border-white/70 hover:bg-white/10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                : "bg-[#48dfb2] text-white hover:bg-[#bff2bc] hover:text-black shadow-sm"
+                : "bg-[#2fd680] text-white hover:bg-[#41deb9] hover:text-black shadow-sm"
                 }`}
             >
               Đăng nhập
             </button>
+
 
           </div>
         </div>
