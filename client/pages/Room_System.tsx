@@ -32,6 +32,7 @@ export default function RoomSystem() {
           return false;
         }
 
+
         // Filter by guests - must match exactly if specified
         if (typeof searchFilters.guests !== "undefined" && searchFilters.guests !== null) {
           const roomGuests = parseInt(room.guests.split(" ")[0], 10) || 1;
@@ -41,6 +42,14 @@ export default function RoomSystem() {
         }
 
         // Room passes all filters
+
+        // If guests filter is provided, parse number of guests from room data and match exactly
+        if (typeof searchFilters.guests !== "undefined" && searchFilters.guests !== null) {
+          const roomGuests = parseInt(room.guests.split(" ")[0], 10) || 1;
+          return roomGuests === searchFilters.guests;
+        }
+
+        // No guests filter -> include the room
         return true;
       });
       setFilteredRooms(filtered);
